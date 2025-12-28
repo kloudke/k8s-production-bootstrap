@@ -1,27 +1,27 @@
 all:
   hosts:
-    {% for host in hosts %}
-    {{ host.name }}:
-      ansible_host: {{ host.ip }}
-      ip: {{ host.ip }}
-      access_ip: {{ host.access_ip }}
-    {% endfor %}
+    %{ for index, name in vm_names ~}
+    ${name}:
+      ansible_host: ${vm_ips[index]}
+      ip: ${vm_ips[index]}
+      access_ip: ${vm_ips[index]}
+    %{ endfor ~}
   children:
     kube_control_plane:
       hosts:
-        {% for host in control_plane_hosts %}
-        {{ host }}:
-        {% endfor %}
+        %{ for name in vm_names ~}
+        ${name}:
+        %{ endfor ~}
     kube_node:
       hosts:
-        {% for host in node_hosts %}
-        {{ host }}:
-        {% endfor %}
+        %{ for name in vm_names ~}
+        ${name}:
+        %{ endfor ~}
     etcd:
       hosts:
-        {% for host in etcd_hosts %}
-        {{ host }}:
-        {% endfor %}
+        %{ for name in vm_names ~}
+        ${name}:
+        %{ endfor ~}
     k8s_cluster:
       children:
         kube_control_plane:
