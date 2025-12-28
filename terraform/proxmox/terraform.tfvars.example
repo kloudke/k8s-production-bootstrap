@@ -1,7 +1,0 @@
-proxmox_api_url  = "https://192.168.1.2:8006/api2/json"
-proxmox_user     = "terraform@pve"
-proxmox_password = "Xcqt0689"
-node             = "proxmox-pve01"
-vm_count         = 3
-vm_name_prefix   = "k8snode"
-template_id      = 9003
