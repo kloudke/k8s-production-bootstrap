@@ -26,7 +26,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform init -input=false -no-color
+        run: terraform init -no-color
 
       - name: Terraform Validate
         run: terraform validate -no-color
@@ -47,7 +47,7 @@ jobs:
           TF_VAR_proxmox_user: ${{ secrets.PROXMOX_USER }}
           TF_VAR_proxmox_password: ${{ secrets.PROXMOX_PASSWORD }}
           TF_VAR_ssh_keys: ${{ secrets.SSH_PUBLIC_KEY }}
-        run: terraform apply input=false -no-color --auto-approve
+        run: terraform apply -input=false -no-color --auto-approve
 
       - name: Upload Ansible Inventory
         if: always()
