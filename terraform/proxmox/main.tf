@@ -20,12 +20,10 @@ module "proxmox_vm" {
   proxmox_password = var.proxmox_password
 
   # VM Variables
-  vm_count    = var.vm_count
-  vm_name     = var.vm_name_prefix
-  node        = var.node
-  template_id = var.template_id
-
-  # Standard Config
+  node             = "proxmox-pve01"
+  vm_name          = "k8snode"
+  template_id      = 9003
+  vm_count         = 4
   cpu_cores        = 2
   cpu_sockets      = 1
   memory           = 4096
