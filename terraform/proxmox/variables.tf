@@ -36,7 +36,7 @@ variable "master_count" {
 variable "vm_name_prefix" {
   description = "Prefix for VM names"
   type        = string
-  default     = "k8s-node"
+  default     = "k8snode"
 }
 
 variable "template_id" {
@@ -45,8 +45,8 @@ variable "template_id" {
   default     = 9003
 }
 
-variable "ssh_public_key" {
-  description = "SSH Public Key for Cloud-Init"
-  type        = string
-  default     = ""
+variable "ssh_keys" {
+  description = "List of SSH public keys to add to the VM"
+  type        = list(string)
+  default     = []
 }
