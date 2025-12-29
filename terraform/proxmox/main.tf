@@ -24,7 +24,7 @@ module "proxmox_vm" {
   node             = "proxmox-pve01"
   vm_name          = "k8snode"
   template_id      = 9003
-  vm_count         = 4
+  vm_count         = 3
   cpu_cores        = 2
   cpu_sockets      = 1
   memory           = 4096
