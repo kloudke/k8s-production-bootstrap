@@ -18,6 +18,7 @@ module "proxmox_vm" {
   proxmox_api_url  = var.proxmox_api_url
   proxmox_user     = var.proxmox_user
   proxmox_password = var.proxmox_password
+  ssh_keys         = var.ssh_keys
 
   # VM Variables
   node             = "proxmox-pve01"
