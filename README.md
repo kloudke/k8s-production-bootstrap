@@ -34,6 +34,7 @@ Change to the terraform directory:
 ```bash
 cd ./terraform/proxmox
 ```
+Then initialize terraform:
 ```bash
 terraform init
 ```
