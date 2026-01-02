@@ -33,5 +33,4 @@ See `docs/architecture.md`
 ```bash
 cd terraform/proxmox
 terraform init
-terraform apply
 ```
