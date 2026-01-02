@@ -42,3 +42,7 @@ Then you run the plan command to confirm what will be provisioned:
 ```bash
 terraform plan
 ```
+Now you can apply the confirguration to provision the resources:
+```bash
+terraform apply --auto-approve
+```
