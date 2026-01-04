@@ -2,6 +2,10 @@ name: Bootstrap Nodes
 
 on:
   workflow_dispatch:
+  #push:
+  #  branches:
+  #    - main
+  #    - master
 
 jobs:
   bootstrap:
