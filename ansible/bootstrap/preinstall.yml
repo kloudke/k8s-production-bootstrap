@@ -13,7 +13,7 @@
     - name: Gather facts
       setup:
 
-    - name: Disable Swap (Permanent)
+    - name: Disable Swap
       replace:
         path: /etc/fstab
         regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
