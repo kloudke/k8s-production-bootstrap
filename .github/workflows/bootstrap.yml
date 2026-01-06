@@ -2,7 +2,7 @@ name: Bootstrap Nodes
 
 on:
   workflow_dispatch:
-  push:
+  #push:
   #  branches:
   #    - main
   #    - master
@@ -30,7 +30,7 @@ jobs:
           python -m pip install ansible
 
       - name: Ensure Inventory Directory Exists
-        run: mkdir -p ../../ansible/kubespray/inventory
+        run: mkdir -p ../../ansible/inventory
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -59,4 +59,4 @@ jobs:
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
-          ansible-playbook -i kubespray/inventory/hosts.yml bootstrap/preinstall.yml --private-key ~/.ssh/id_rsa
+          ansible-playbook -i inventory/hosts.yml bootstrap/preinstall.yml --private-key ~/.ssh/id_rsa

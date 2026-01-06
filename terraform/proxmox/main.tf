@@ -73,5 +73,5 @@ resource "local_file" "ansible_inventory" {
     masters  = slice(sort(keys(module.proxmox_vm.vm_ip_addresses)), 0, var.master_count)
     workers  = slice(sort(keys(module.proxmox_vm.vm_ip_addresses)), var.master_count, length(keys(module.proxmox_vm.vm_ip_addresses)))
   })
-  filename = "${path.module}/../../ansible/kubespray/inventory/hosts.yml"
+  filename = "${path.module}/../../ansible/inventory/hosts.yml"
 }
