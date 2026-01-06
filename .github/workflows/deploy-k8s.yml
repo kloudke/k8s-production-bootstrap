@@ -54,7 +54,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Run Kubespray (Cluster)
+      - name: Deploy k8s Cluster
         working-directory: ./ansible/kubespray-source
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
