@@ -2,6 +2,7 @@ name: Deploy Kubernetes
 
 on:
   workflow_dispatch:
+  push:
     
 jobs:
   deploy-k8s:
