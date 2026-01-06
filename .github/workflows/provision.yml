@@ -51,9 +51,4 @@ jobs:
           TF_VAR_ssh_keys: ${{ secrets.SSH_PUBLIC_KEY }}
         run: terraform apply -input=false -no-color --auto-approve -parallelism=1
 
-      - name: Upload Ansible Inventory
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ansible-inventory
-          path: ansible/kubespray/inventory/hosts.yml
+
