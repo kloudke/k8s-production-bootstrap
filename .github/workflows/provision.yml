@@ -2,14 +2,14 @@ name: Provision Infrastructure
 
 on:
   workflow_dispatch:
-  #push:
+  push:
   #  branches:
   #    - main
   #    - master
 
 jobs:
   terraform:
-    name: "Terraform"
+    name: "Terraform Provision"
     runs-on: self-hosted
     defaults:
       run:
