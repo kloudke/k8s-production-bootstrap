@@ -1,0 +1,61 @@
+name: Deploy Kubernetes
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-k8s:
+    name: "Deploy Kubernetes"
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: ./terraform/proxmox
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Python 3
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+          
+      - name: Install Dependencies
+        working-directory: ./ansible/kubespray-source
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Ensure Inventory Directory Exists
+        run: mkdir -p ../../ansible/inventory
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        run: terraform init -no-color
+
+      - name: Generate Inventory
+        env:
+          TF_VAR_proxmox_api_url: ${{ secrets.PROXMOX_API_URL }}
+          TF_VAR_proxmox_user: ${{ secrets.PROXMOX_USER }}
+          TF_VAR_proxmox_password: ${{ secrets.PROXMOX_PASSWORD }}
+          TF_VAR_ssh_keys: ${{ secrets.SSH_PUBLIC_KEY }}
+        run: terraform apply -target=local_file.ansible_inventory -auto-approve -no-color
+
+      - name: Create SSH Key File
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Run Kubespray (Cluster)
+        working-directory: ./ansible
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
+        run: |
+          ansible-playbook -i inventory/hosts.yml kubespray-source/cluster.yml --private-key ~/.ssh/id_rsa -b -v
