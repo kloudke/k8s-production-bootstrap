@@ -9,7 +9,7 @@ on:
 
 jobs:
   terraform:
-    name: "Terraform"
+    name: "Destroy Infrastructure"
     runs-on: self-hosted
     defaults:
       run:

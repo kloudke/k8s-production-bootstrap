@@ -9,7 +9,7 @@ on:
 
 jobs:
   terraform:
-    name: "Terraform Provision"
+    name: "Provision Infrastructure"
     runs-on: self-hosted
     defaults:
       run:
