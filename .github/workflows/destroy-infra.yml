@@ -2,11 +2,7 @@ name: Destroy Infrastructure
 
 on:
   workflow_dispatch:
-  #push:
-  #  branches:
-  #    - main
-  #    - master
-
+    
 jobs:
   terraform:
     name: "Destroy Infrastructure"

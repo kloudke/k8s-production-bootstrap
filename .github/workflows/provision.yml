@@ -2,10 +2,6 @@ name: Provision Infrastructure
 
 on:
   workflow_dispatch:
-  #push:
-  #  branches:
-  #    - main
-  #    - master
 
 jobs:
   terraform:
