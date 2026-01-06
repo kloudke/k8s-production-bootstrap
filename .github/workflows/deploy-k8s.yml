@@ -58,4 +58,4 @@ jobs:
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
-          ansible-playbook -i inventory/hosts.yml kubespray-source/cluster.yml --private-key ~/.ssh/id_rsa -b -v
+          ansible-playbook -i inventory/hosts.yml --private-key ~/.ssh/id_rsa -b -vv kubespray-source/cluster.yml --check
