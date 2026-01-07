@@ -22,6 +22,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Wait for VMs to Settle
+        run: sleep 60
+
       - name: Setup Python 3
         uses: actions/setup-python@v4
         with:
