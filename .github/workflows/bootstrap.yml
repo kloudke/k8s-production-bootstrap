@@ -2,10 +2,17 @@ name: Bootstrap Nodes
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Provision Infrastructure"]
+    types:
+      - completed
+    branches:
+      - main
 
 jobs:
   bootstrap:
     name: "Bootstrap Nodes"
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: self-hosted
     defaults:
       run:

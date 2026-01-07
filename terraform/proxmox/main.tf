@@ -48,6 +48,13 @@ module "proxmox_vm" {
       type    = "disk"
       slot    = "scsi0"
       format  = "qcow2"
+    },
+    {
+      size    = "50G"
+      storage = "nvme-storage"
+      type    = "disk"
+      slot    = "scsi1"
+      format  = "raw"
     }
   ]
   networks = [

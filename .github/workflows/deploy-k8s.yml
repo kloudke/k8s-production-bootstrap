@@ -2,10 +2,17 @@ name: Deploy Kubernetes
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Bootstrap Nodes"]
+    types:
+      - completed
+    branches:
+      - main
     
 jobs:
   deploy-k8s:
     name: "Deploy Kubernetes"
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: self-hosted
     defaults:
       run:
@@ -62,10 +69,4 @@ jobs:
 
       - name: Print Kubeconfig
         run: cat ansible/inventory/artifacts/admin.conf
-
-      - name: Upload Kubeconfig
-        uses: actions/upload-artifact@v4
-        with:
-          name: admin.conf
-          path: ansible/inventory/artifacts/admin.conf
      
