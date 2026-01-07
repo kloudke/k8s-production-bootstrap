@@ -25,7 +25,7 @@ jobs:
           submodules: true
 
       - name: Wait for Bootstrap to Settle
-        run: sleep 60
+        run: sleep 30
 
       - name: Setup Python 3
         uses: actions/setup-python@v4
