@@ -65,3 +65,10 @@ jobs:
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           kubectl apply -f kubernetes/metallb/
           kubectl apply -f kubernetes/ingress-nginx/
+          
+          # Deploy Cert-Manager
+          kubectl apply -f kubernetes/cert-manager/cert-manager.yaml
+          kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
+          
+          # Create Cloudflare Secret & Apply Cluster Issuers
+          sed "s/CLOUDFLARE_API_TOKEN/${{ secrets.CLOUDFLARE_API_TOKEN }}/g" kubernetes/cert-manager/cluster-issuers.yaml | kubectl apply -f -
