@@ -51,7 +51,7 @@ module "proxmox_vm" {
     },
     {
       size    = "50G"
-      storage = "nvme-storage"
+      storage = "local-lvm"
       type    = "disk"
       slot    = "scsi1"
       format  = "raw"
