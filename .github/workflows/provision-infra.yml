@@ -2,6 +2,7 @@ name: Provision Infrastructure
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   terraform:
