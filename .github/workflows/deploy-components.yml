@@ -2,7 +2,6 @@ name: Deploy Components
 
 on:
   workflow_dispatch:
-  push:
 
 jobs:
   deploy-components:
@@ -60,9 +59,8 @@ jobs:
         run: |
           ansible-playbook -i inventory/hosts.yml --private-key ~/.ssh/id_rsa -b -v fetch-kubeconfig.yml
 
-      - name: Get the Nodes
+      - name: Apply MetalLB Manifests
         working-directory: ./
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-          kubectl get nodes
-         # kubectl apply -f kubernetes/metallb/
+          kubectl apply -f kubernetes/metallb/
