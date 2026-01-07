@@ -63,7 +63,11 @@ jobs:
         working-directory: ./
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+
+          # Deploy MetalLB LoadBalancer
           kubectl apply -f kubernetes/metallb/
+          
+          # Deploy Ingress-Nginx
           kubectl apply -f kubernetes/ingress-nginx/
           
           # Deploy Cert-Manager
