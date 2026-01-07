@@ -2,8 +2,7 @@ name: Deploy Components
 
 on:
   workflow_dispatch:
-  push:
-    
+
 jobs:
   deploy-components:
     name: "Deploy Components"
