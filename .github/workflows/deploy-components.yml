@@ -2,7 +2,8 @@ name: Deploy Components
 
 on:
   workflow_dispatch:
-
+  push:
+    
 jobs:
   deploy-components:
     name: "Deploy Components"
@@ -63,4 +64,5 @@ jobs:
         working-directory: ./
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-          kubectl apply -f kubernetes/metallb/
+          kubectl get nodes
+         # kubectl apply -f kubernetes/metallb/
