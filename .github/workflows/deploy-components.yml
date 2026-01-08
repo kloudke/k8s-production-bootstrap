@@ -98,7 +98,8 @@ jobs:
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
             --namespace monitoring \
-            --create-namespace
+            --create-namespace \
+            -f kubernetes/monitoring/values.yaml
           
       - name: Deploy Logging Stack
         run: |
@@ -107,4 +108,5 @@ jobs:
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           helm upgrade --install loki-stack grafana/loki-stack \
             --namespace logging \
-            --create-namespace
+            --create-namespace \
+            -f kubernetes/logging/values.yaml
