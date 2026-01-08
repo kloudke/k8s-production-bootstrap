@@ -127,3 +127,4 @@ jobs:
             --namespace argocd \
             --create-namespace \
             -f kubernetes/argocd/values.yaml
+            
