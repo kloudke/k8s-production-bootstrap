@@ -2,7 +2,6 @@ name: Deploy Components
 
 on:
   workflow_dispatch:
-  push:
     
 jobs:
   deploy-components:
@@ -68,17 +67,24 @@ jobs:
           kubectl get nodes
 
           # Deploy MetalLB LoadBalancer
-          #kubectl apply -f kubernetes/metallb/
+          kubectl apply -f kubernetes/metallb/
           
           # Deploy Ingress-Nginx
-          #kubectl apply -f kubernetes/ingress-nginx/
+          kubectl apply -f kubernetes/ingress-nginx/
           
           # Deploy Local Path Provisioner
-          #kubectl apply -f kubernetes/rancher-local/
+          kubectl apply -f kubernetes/rancher-local/
+          
+          # Deploy Rook Ceph
+          kubectl apply -f kubernetes/rook-ceph/crds.yaml
+          kubectl apply -f kubernetes/rook-ceph/common.yaml
+          kubectl apply -f kubernetes/rook-ceph/operator.yaml
+          kubectl wait --for=condition=Available deployment/rook-ceph-operator -n rook-ceph --timeout=120s
+          kubectl apply -f kubernetes/rook-ceph/cluster.yaml
           
           # Deploy Cert-Manager
-          #kubectl apply -f kubernetes/cert-manager/cert-manager.yaml
-          #kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
+          kubectl apply -f kubernetes/cert-manager/cert-manager.yaml
+          kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
           
           # Create Cloudflare Secret & Apply Cluster Issuers
-          #sed "s/CLOUDFLARE_API_TOKEN/${{ secrets.CLOUDFLARE_API_TOKEN }}/g" kubernetes/cert-manager/cluster-issuers.yaml | kubectl apply -f -
+          sed "s/CLOUDFLARE_API_TOKEN/${{ secrets.CLOUDFLARE_API_TOKEN }}/g" kubernetes/cert-manager/cluster-issuers.yaml | kubectl apply -f -
