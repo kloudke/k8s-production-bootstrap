@@ -2,7 +2,8 @@ name: Deploy Components
 
 on:
   workflow_dispatch:
-     
+  push: 
+
 jobs:
   deploy-components:
     name: "Deploy Components"
@@ -66,7 +67,10 @@ jobs:
           kubectl get nodes
 
           # Deploy MetalLB LoadBalancer
-          kubectl apply -f kubernetes/metallb/
+          kubectl apply -f kubernetes/metallb/metallb.yml
+          kubectl wait --for=condition=Available deployment/controller -n metallb-system --timeout=120s
+          kubectl apply -f kubernetes/metallb/ip-pool.yaml
+
           
     #       # Deploy Ingress-Nginx
     #       kubectl apply -f kubernetes/ingress-nginx/
