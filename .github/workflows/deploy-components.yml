@@ -82,18 +82,19 @@ jobs:
           #kubectl get storageclass
           
           # Deploy Rook Ceph
-          #kubectl apply -f kubernetes/rook-ceph/crds.yaml
-          #kubectl apply -f kubernetes/rook-ceph/common.yaml
-          #kubectl apply -f kubernetes/rook-ceph/operator.yaml
-          #kubectl wait --for=condition=Available deployment/rook-ceph-operator -n rook-ceph --timeout=120s
-          #kubectl apply -f kubernetes/rook-ceph/cluster.yaml
-          #kubectl get pods -n rook-ceph
+          kubectl apply -f kubernetes/rook-ceph/crds.yaml
+          kubectl apply -f kubernetes/rook-ceph/common.yaml
+          kubectl apply -f kubernetes/rook-ceph/csi-operator.yaml
+          kubectl apply -f kubernetes/rook-ceph/operator.yaml
+          kubectl wait --for=condition=Available deployment/rook-ceph-operator -n rook-ceph --timeout=120s
+          kubectl apply -f kubernetes/rook-ceph/cluster.yaml
+          kubectl get pods -n rook-ceph
 
           # Rook Toolbox Verification
-          kubectl apply -f kubernetes/rook-ceph/toolbox.yaml
-          kubectl wait --for=condition=Ready pod -l app=rook-ceph-tools -n rook-ceph --timeout=300s
-          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph status
-          kubectl delete -f kubernetes/rook-ceph/toolbox.yaml
+          #kubectl apply -f kubernetes/rook-ceph/toolbox.yaml
+          #kubectl wait --for=condition=Ready pod -l app=rook-ceph-tools -n rook-ceph --timeout=300s
+          #kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph status
+          #kubectl delete -f kubernetes/rook-ceph/toolbox.yaml
           
     #       # Deploy Cert-Manager
     #       kubectl apply -f kubernetes/cert-manager/cert-manager.yaml
