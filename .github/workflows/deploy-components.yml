@@ -63,7 +63,6 @@ jobs:
         working-directory: ./
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-          # Check if nodes are ready
           kubectl get nodes
 
           # Deploy MetalLB LoadBalancer
