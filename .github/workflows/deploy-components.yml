@@ -67,18 +67,19 @@ jobs:
           kubectl get nodes
 
           # Deploy MetalLB LoadBalancer
-          kubectl apply -f kubernetes/metallb/metallb.yaml
-          kubectl wait --for=condition=Available deployment/controller -n metallb-system --timeout=120s
-          kubectl apply -f kubernetes/metallb/ip-pool.yaml
-          kubectl get pods -n metallb-system
+          #kubectl apply -f kubernetes/metallb/metallb.yaml
+          #kubectl wait --for=condition=Available deployment/controller -n metallb-system --timeout=120s
+          #kubectl apply -f kubernetes/metallb/ip-pool.yaml
+          #kubectl get pods -n metallb-system
 
           
           # Deploy Ingress-Nginx
-          kubectl apply -f kubernetes/ingress-nginx/
-          kubectl get svc -n ingress-nginx
+          #kubectl apply -f kubernetes/ingress-nginx/
+          #kubectl get svc -n ingress-nginx
           
-    #       # Deploy Local Path Provisioner
-    #       kubectl apply -f kubernetes/rancher-local/
+          # Deploy Local Path Provisioner
+          kubectl apply -f kubernetes/rancher-local/
+          kubectl get storageclass
           
     #       # Deploy Rook Ceph
     #       kubectl apply -f kubernetes/rook-ceph/crds.yaml
