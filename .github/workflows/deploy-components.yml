@@ -59,7 +59,7 @@ jobs:
         run: |
           ansible-playbook -i inventory/hosts.yml --private-key ~/.ssh/id_rsa -b -v fetch-kubeconfig.yml
 
-      - name: Deploy K8s Components
+      - name: Deploy MetalLB|Nginx|Local Path Provisioner|Rook Ceph|Cert-Manager
         working-directory: ./
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
