@@ -87,3 +87,24 @@ jobs:
           
           # Create Cloudflare Secret & Apply Cluster Issuers
           sed "s/CLOUDFLARE_API_TOKEN/${{ secrets.CLOUDFLARE_API_TOKEN }}/g" kubernetes/cert-manager/cluster-issuers.yaml | kubectl apply -f -
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4.2.0
+
+      - name: Deploy Monitoring Stack
+        run: |
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo update
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+          helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+            --namespace monitoring \
+            --create-namespace
+          
+      - name: Deploy Logging Stack
+        run: |
+          helm repo add grafana https://grafana.github.io/helm-charts
+          helm repo update
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+          helm upgrade --install loki-stack grafana/loki-stack \
+            --namespace logging \
+            --create-namespace
