@@ -67,7 +67,7 @@ jobs:
           kubectl get nodes
 
           # Deploy MetalLB LoadBalancer
-          kubectl apply -f kubernetes/metallb/metallb.yml
+          kubectl apply -f kubernetes/metallb/metallb.yaml
           kubectl wait --for=condition=Available deployment/controller -n metallb-system --timeout=120s
           kubectl apply -f kubernetes/metallb/ip-pool.yaml
 
