@@ -70,6 +70,7 @@ jobs:
           kubectl apply -f kubernetes/metallb/metallb.yaml
           kubectl wait --for=condition=Available deployment/controller -n metallb-system --timeout=120s
           kubectl apply -f kubernetes/metallb/ip-pool.yaml
+          kubectl get pods -n metallb-system
 
           
     #       # Deploy Ingress-Nginx
