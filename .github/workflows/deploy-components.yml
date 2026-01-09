@@ -100,8 +100,8 @@ jobs:
           #kubectl delete -f kubernetes/rook-ceph/toolbox.yaml
           
           # Deploy Cert-Manager
-          kubectl apply -f kubernetes/cert-manager/cert-manager.yaml
-          kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
+          #kubectl apply -f kubernetes/cert-manager/cert-manager.yaml
+          #kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
           kubectl get pods -n cert-manager
           kubectl get svc -n cert-manager
           
@@ -145,3 +145,4 @@ jobs:
     #         --namespace argocd \
     #         --create-namespace \
     #         -f kubernetes/argocd/values.yaml
+
