@@ -2,7 +2,6 @@ name: Deploy Components
 
 on:
   workflow_dispatch:
-  push:
 
 jobs:
   deploy-components:
@@ -106,26 +105,26 @@ jobs:
           #kubectl get svc -n cert-manager
           
           # Create Cloudflare Secret & Apply Cluster Issuers
-          kubectl create secret generic cloudflare-apitoken-secret \
-            --namespace cert-manager \
-            --from-literal=apitoken='${{ secrets.CLOUDFLARE_API_TOKEN }}' \
-            --dry-run=client -o yaml | kubectl apply -f -
+          #kubectl create secret generic cloudflare-apitoken-secret \
+          #  --namespace cert-manager \
+          #  --from-literal=apitoken='${{ secrets.CLOUDFLARE_API_TOKEN }}' \
+          #  --dry-run=client -o yaml | kubectl apply -f -
          
-          kubectl apply -f kubernetes/cert-manager/cluster-issuers.yaml
+          #kubectl apply -f kubernetes/cert-manager/cluster-issuers.yaml
           kubectl get clusterissuers
 
-    #   - name: Setup Helm
-    #     uses: azure/setup-helm@v4.2.0
+      - name: Setup Helm
+        uses: azure/setup-helm@v4.2.0
 
-    #   - name: Deploy Monitoring Stack
-    #     run: |
-    #       helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-    #       helm repo update
-    #       export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-    #       helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
-    #         --namespace monitoring \
-    #         --create-namespace \
-    #         -f kubernetes/monitoring/values.yaml
+      - name: Deploy Monitoring Stack
+        run: |
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo update
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+          helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+            --namespace monitoring \
+            --create-namespace \
+            -f kubernetes/monitoring/values.yaml
           
     #   - name: Deploy Logging Stack
     #     run: |
