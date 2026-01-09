@@ -7,7 +7,8 @@ grafana:
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
       - grafana.cloudspinx.dpdns.org
-    path: /
+    paths:
+      - /
     tls:
       - secretName: grafana-server-tls
         hosts:
