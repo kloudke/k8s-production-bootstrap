@@ -125,6 +125,8 @@ jobs:
             --namespace monitoring \
             --create-namespace \
             -f kubernetes/monitoring/values.yaml
+          kubectl get pods -n monitoring
+          kubectl get certificate -n monitoring
           
     #   - name: Deploy Logging Stack
     #     run: |
