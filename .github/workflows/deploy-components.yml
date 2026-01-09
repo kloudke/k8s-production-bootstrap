@@ -102,16 +102,17 @@ jobs:
           # Deploy Cert-Manager
           #kubectl apply -f kubernetes/cert-manager/cert-manager.yaml
           #kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
-          kubectl get pods -n cert-manager
-          kubectl get svc -n cert-manager
+          #kubectl get pods -n cert-manager
+          #kubectl get svc -n cert-manager
           
-    #      # Create Cloudflare Secret & Apply Cluster Issuers
-    #      kubectl create secret generic cloudflare-apitoken-secret \
-    #        --namespace cert-manager \
-    #        --from-literal=apitoken='${{ secrets.CLOUDFLARE_API_TOKEN }}' \
-    #        --dry-run=client -o yaml | kubectl apply -f -
-    #      
-    #      kubectl apply -f kubernetes/cert-manager/cluster-issuers.yaml
+          # Create Cloudflare Secret & Apply Cluster Issuers
+          kubectl create secret generic cloudflare-apitoken-secret \
+            --namespace cert-manager \
+            --from-literal=apitoken='${{ secrets.CLOUDFLARE_API_TOKEN }}' \
+            --dry-run=client -o yaml | kubectl apply -f -
+         
+          kubectl apply -f kubernetes/cert-manager/cluster-issuers.yaml
+          kubectl get clusterissuers
 
     #   - name: Setup Helm
     #     uses: azure/setup-helm@v4.2.0
