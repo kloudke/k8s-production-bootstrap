@@ -114,20 +114,20 @@ jobs:
           #kubectl apply -f kubernetes/cert-manager/cluster-issuers.yaml
           kubectl get clusterissuers
 
-      - name: Setup Helm
-        uses: azure/setup-helm@v4.2.0
+    #   - name: Setup Helm
+    #     uses: azure/setup-helm@v4.2.0
 
-      - name: Deploy Monitoring Stack
-        run: |
-          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-          helm repo update
-          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-          helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
-            --namespace monitoring \
-            --create-namespace \
-            -f kubernetes/monitoring/values.yaml
-          kubectl get pods -n monitoring
-          kubectl get certificate -n monitoring
+    #   - name: Deploy Monitoring Stack
+    #     run: |
+    #       helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    #       helm repo update
+    #       export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+    #       helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+    #         --namespace monitoring \
+    #         --create-namespace \
+    #         -f kubernetes/monitoring/values.yaml
+    #       kubectl get pods -n monitoring
+    #       kubectl get certificate -n monitoring
           
     #   - name: Deploy Logging Stack
     #     run: |
