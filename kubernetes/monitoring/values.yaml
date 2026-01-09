@@ -3,9 +3,15 @@ grafana:
   ingress:
     enabled: true
     ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
       - grafana.cloudspinx.dpdns.org
     path: /
+    tls:
+      - secretName: grafana-server-tls
+        hosts:
+          - grafana.cloudspinx.dpdns.org
   persistence:
     enabled: true
     storageClassName: local-path
