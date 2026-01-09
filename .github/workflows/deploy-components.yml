@@ -2,6 +2,7 @@ name: Deploy Components
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   deploy-components:
@@ -90,25 +91,27 @@ jobs:
           #kubectl get pods -n rook-ceph
 
           # Rook Toolbox Verification
-          kubectl apply -f kubernetes/rook-ceph/toolbox.yaml
-          kubectl wait --for=condition=Ready pod -l app=rook-ceph-tools -n rook-ceph --timeout=300s
-          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph status
-          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph osd status
-          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph df
-          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- rados df
-          kubectl delete -f kubernetes/rook-ceph/toolbox.yaml
+          #kubectl apply -f kubernetes/rook-ceph/toolbox.yaml
+          #kubectl wait --for=condition=Ready pod -l app=rook-ceph-tools -n rook-ceph --timeout=300s
+          #kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph status
+          #kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph osd status
+          #kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph df
+          #kubectl -n rook-ceph exec deploy/rook-ceph-tools -- rados df
+          #kubectl delete -f kubernetes/rook-ceph/toolbox.yaml
           
-    #       # Deploy Cert-Manager
-    #       kubectl apply -f kubernetes/cert-manager/cert-manager.yaml
-    #       kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
+          # Deploy Cert-Manager
+          kubectl apply -f kubernetes/cert-manager/cert-manager.yaml
+          kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
+          kubectl get pods -n cert-manager
+          kubectl get svc -n cert-manager
           
-    #       # Create Cloudflare Secret & Apply Cluster Issuers
-    #       kubectl create secret generic cloudflare-apitoken-secret \
-    #         --namespace cert-manager \
-    #         --from-literal=apitoken='${{ secrets.CLOUDFLARE_API_TOKEN }}' \
-    #         --dry-run=client -o yaml | kubectl apply -f -
-    #       
-    #       kubectl apply -f kubernetes/cert-manager/cluster-issuers.yaml
+    #      # Create Cloudflare Secret & Apply Cluster Issuers
+    #      kubectl create secret generic cloudflare-apitoken-secret \
+    #        --namespace cert-manager \
+    #        --from-literal=apitoken='${{ secrets.CLOUDFLARE_API_TOKEN }}' \
+    #        --dry-run=client -o yaml | kubectl apply -f -
+    #      
+    #      kubectl apply -f kubernetes/cert-manager/cluster-issuers.yaml
 
     #   - name: Setup Helm
     #     uses: azure/setup-helm@v4.2.0
