@@ -139,6 +139,8 @@ jobs:
             --namespace logging \
             --create-namespace \
             -f kubernetes/logging/values.yaml
+          kubectl get pods -n logging
+          kubectl get svc -n logging
 
     #   - name: Deploy Argo CD
     #     run: |
