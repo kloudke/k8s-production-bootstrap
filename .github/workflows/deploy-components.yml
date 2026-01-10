@@ -142,7 +142,7 @@ jobs:
           kubectl get pods -n logging
           kubectl get svc -n logging
 
-    #   - name: Deploy Argo CD
+    #   - name: Deploy ArgoCD
     #     working-directory: ./
     #     run: |
     #       helm repo add argo https://argoproj.github.io/argo-helm
