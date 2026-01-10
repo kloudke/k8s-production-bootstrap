@@ -70,6 +70,13 @@ jobs:
         run: |
           ansible-playbook -i ../inventory/hosts.yml --private-key ~/.ssh/id_rsa -b -vv cluster.yml
 
+      - name: Fetch Kubeconfig
+        working-directory: ./ansible
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
+        run: |
+          ansible-playbook -i inventory/hosts.yml --private-key ~/.ssh/id_rsa -b -v fetch-kubeconfig.yml 
+      
       - name: Print Kubeconfig
         run: cat ansible/inventory/artifacts/admin.conf
      
