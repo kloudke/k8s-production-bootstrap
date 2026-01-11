@@ -129,18 +129,18 @@ jobs:
     #       kubectl get pods -n monitoring
     #       kubectl get certificate -n monitoring
           
-      - name: Deploy Logging Stack
-        working-directory: ./
-        run: |
-          helm repo add grafana https://grafana.github.io/helm-charts
-          helm repo update
-          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-          helm upgrade --install loki-stack grafana/loki-stack \
-            --namespace logging \
-            --create-namespace \
-            -f kubernetes/logging/values.yaml
-          kubectl get pods -n logging
-          kubectl get svc -n logging
+    #   - name: Deploy Logging Stack
+    #     working-directory: ./
+    #     run: |
+    #       helm repo add grafana https://grafana.github.io/helm-charts
+    #       helm repo update
+    #       export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+    #       helm upgrade --install loki-stack grafana/loki-stack \
+    #         --namespace logging \
+    #         --create-namespace \
+    #         -f kubernetes/logging/values.yaml
+    #       kubectl get pods -n logging
+    #       kubectl get svc -n logging
 
     #   - name: Deploy ArgoCD
     #     working-directory: ./
