@@ -142,14 +142,14 @@ jobs:
     #       kubectl get pods -n logging
     #       kubectl get svc -n logging
 
-    #   - name: Deploy ArgoCD
-    #     working-directory: ./
-    #     run: |
-    #       helm repo add argo https://argoproj.github.io/argo-helm
-    #       helm repo update
-    #       export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-    #       helm upgrade --install argocd argo/argo-cd \
-    #         --namespace argocd \
-    #         --create-namespace \
-    #         -f kubernetes/argocd/values.yaml
+      - name: Deploy ArgoCD
+        working-directory: ./
+        run: |
+          helm repo add argo https://argoproj.github.io/argo-helm
+          helm repo update
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+          helm upgrade --install argocd argo/argo-cd \
+            --namespace argocd \
+            --create-namespace \
+            -f kubernetes/argocd/values.yaml
 
