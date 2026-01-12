@@ -23,7 +23,7 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: local-path
+          storageClassName: rook-ceph-block
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
@@ -35,7 +35,7 @@ alertmanager:
     storage:
       volumeClaimTemplate:
         spec:
-          storageClassName: local-path
+          storageClassName: rook-ceph-block
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
