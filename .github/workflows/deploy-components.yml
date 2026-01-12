@@ -59,10 +59,11 @@ jobs:
         run: |
           ansible-playbook -i inventory/hosts.yml --private-key ~/.ssh/id_rsa -b -v fetch-kubeconfig.yml
 
-    #   - name: Deploy MetalLB|Nginx|Local Path Provisioner|Rook Ceph|Cert-Manager
-    #     working-directory: ./
-    #     run: |
-    #       export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+      - name: Deploy MetalLB|Nginx|Local Path Provisioner|Rook Ceph|Cert-Manager
+        working-directory: ./
+        run: |
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+          kubectl apply -f kubernetes/rook-ceph/block-storage/storageclass.yaml
     #       kubectl get nodes
 
     #       # Deploy MetalLB LoadBalancer
@@ -116,18 +117,18 @@ jobs:
       - name: Setup Helm
         uses: azure/setup-helm@v4.2.0
 
-    #   - name: Deploy Monitoring Stack
-    #     working-directory: ./
-    #     run: |
-    #       helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-    #       helm repo update
-    #       export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-    #       helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
-    #         --namespace monitoring \
-    #         --create-namespace \
-    #         -f kubernetes/monitoring/values.yaml
-    #       kubectl get pods -n monitoring
-    #       kubectl get certificate -n monitoring
+      - name: Deploy Monitoring Stack
+        working-directory: ./
+        run: |
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo update
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+          helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+            --namespace monitoring \
+            --create-namespace \
+            -f kubernetes/monitoring/values.yaml
+          kubectl get pods -n monitoring
+          kubectl get certificate -n monitoring
           
     #   - name: Deploy Logging Stack
     #     working-directory: ./
