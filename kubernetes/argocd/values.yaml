@@ -7,12 +7,11 @@ server:
     ingressClassName: nginx
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
     hosts:
       - argocd.cloudspinx.dpdns.org
-    paths:
-      - path: /
-        pathType: Prefix 
+    path: /
+    pathType: Prefix 
     tls:
       - secretName: argocd-server-tls
         hosts:
