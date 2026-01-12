@@ -2,6 +2,7 @@ global:
   domain: argocd.cloudspinx.dpdns.org
 
 server:
+  insecure: true
   ingress:
     enabled: true
     ingressClassName: nginx
