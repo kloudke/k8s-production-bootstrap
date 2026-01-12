@@ -9,7 +9,7 @@ server:
       - argocd.cloudspinx.dpdns.org
     paths:
       - /
-    pathType: Prefix.  
+    pathType: Prefix  
     tls:
       - secretName: argocd-server-tls
         hosts:
