@@ -124,14 +124,6 @@ jobs:
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo update
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-
-          kubectl -n monitoring scale statefulset alertmanager-kube-prometheus-stack-alertmanager --replicas=0
-          kubectl -n monitoring scale statefulset prometheus-kube-prometheus-stack-prometheus --replicas=0
-          
-          kubectl -n monitoring delete pvc \
-            alertmanager-kube-prometheus-stack-alertmanager-db-alertmanager-kube-prometheus-stack-alertmanager-0 \
-            prometheus-kube-prometheus-stack-prometheus-db-prometheus-kube-prometheus-stack-prometheus-0 
-
           helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
             --namespace monitoring \
             --create-namespace \
