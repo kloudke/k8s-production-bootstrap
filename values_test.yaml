@@ -1,8 +1,0 @@
-global:
-  domain: TEST_DOMAIN.com
-server:
-  ingress:
-    enabled: true
-    ingressClassName: nginx
-    hosts:
-      - IGNORED_HOST.com
