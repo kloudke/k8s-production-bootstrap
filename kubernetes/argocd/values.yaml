@@ -1,3 +1,6 @@
+global:
+  domain: argocd.cloudspinx.dpdns.org
+
 server:
   ingress:
     enabled: true
@@ -7,8 +10,9 @@ server:
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     hosts:
       - argocd.cloudspinx.dpdns.org
-    path: /
-    pathType: Prefix  
+    paths:
+      - path: /
+        pathType: Prefix 
     tls:
       - secretName: argocd-server-tls
         hosts:
