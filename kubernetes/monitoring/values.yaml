@@ -15,7 +15,7 @@ grafana:
           - grafana.cloudspinx.dpdns.org
   persistence:
     enabled: true
-    storageClassName: local-path
+    storageClassName: rook-ceph-block
     size: 10Gi
 
 prometheus:

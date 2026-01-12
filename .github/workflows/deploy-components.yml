@@ -60,11 +60,10 @@ jobs:
         run: |
           ansible-playbook -i inventory/hosts.yml --private-key ~/.ssh/id_rsa -b -v fetch-kubeconfig.yml
 
-      - name: Deploy MetalLB|Nginx|Local Path Provisioner|Rook Ceph|Cert-Manager
-        working-directory: ./
-        run: |
-          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-          kubectl apply -f kubernetes/rook-ceph/block-storage/storageclass.yaml
+    #   - name: Deploy MetalLB|Nginx|Local Path Provisioner|Rook Ceph|Cert-Manager
+    #     working-directory: ./
+    #     run: |
+    #       export KUBECONFIG=ansible/inventory/artifacts/admin.conf
     #       kubectl get nodes
 
     #       # Deploy MetalLB LoadBalancer
@@ -90,6 +89,7 @@ jobs:
     #       kubectl wait --for=condition=Available deployment/rook-ceph-operator -n rook-ceph --timeout=120s
     #       kubectl apply -f kubernetes/rook-ceph/cluster.yaml
     #       kubectl get pods -n rook-ceph
+    #       kubectl apply -f kubernetes/rook-ceph/block-storage/storageclass.yaml
 
     #       # Rook Toolbox Verification
     #       kubectl apply -f kubernetes/rook-ceph/toolbox.yaml
