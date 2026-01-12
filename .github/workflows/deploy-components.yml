@@ -149,7 +149,8 @@ jobs:
           helm repo add argo https://argoproj.github.io/argo-helm
           helm repo update
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-          helm upgrade argocd argo/argo-cd \
+          helm uninstall argocd -n argocd
+          helm upgrade --install argocd argo/argo-cd \
             --namespace argocd \
             --create-namespace \
             -f kubernetes/argocd/values.yaml
