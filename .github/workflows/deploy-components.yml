@@ -59,12 +59,13 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
           ansible-playbook -i inventory/hosts.yml --private-key ~/.ssh/id_rsa -b -v fetch-kubeconfig.yml
-
-    #   - name: Deploy MetalLB|Nginx|Local Path Provisioner|Rook Ceph|Cert-Manager
-    #     working-directory: ./
-    #     run: |
-    #       export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-    #       kubectl get nodes
+          
+      - name: Deploy MetalLB|Nginx|Local Path Provisioner|Rook Ceph|Cert-Manager
+        working-directory: ./
+        run: |
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+          kubectl get nodes
+          kubectl apply -f kubernetes/ingress-nginx/
 
     #       # Deploy MetalLB LoadBalancer
     #       kubectl apply -f kubernetes/metallb/metallb.yaml
