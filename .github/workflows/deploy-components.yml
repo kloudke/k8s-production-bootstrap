@@ -65,7 +65,6 @@ jobs:
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           kubectl get nodes
-          kubectl apply -f kubernetes/ingress-nginx/
 
     #       # Deploy MetalLB LoadBalancer
     #       kubectl apply -f kubernetes/metallb/metallb.yaml
