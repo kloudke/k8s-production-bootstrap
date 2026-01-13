@@ -2,7 +2,6 @@ name: Deploy Components
 
 on:
   workflow_dispatch:
-  push:
 
 jobs:
   deploy-components:
@@ -60,63 +59,69 @@ jobs:
         run: |
           ansible-playbook -i inventory/hosts.yml --private-key ~/.ssh/id_rsa -b -v fetch-kubeconfig.yml
           
-      - name: Deploy MetalLB|Nginx|Local Path Provisioner|Rook Ceph|Cert-Manager
+      - name: Deploy MetalLB
         working-directory: ./
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-          kubectl get nodes
+          # Deploy MetalLB LoadBalancer
+          kubectl apply -f kubernetes/metallb/metallb.yaml
+          kubectl wait --for=condition=Available deployment/controller -n metallb-system --timeout=120s
+          kubectl apply -f kubernetes/metallb/ip-pool.yaml
+          kubectl get pods -n metallb-system
+    
+      - name: Deploy Ingress Nginx
+        working-directory: ./
+        run: |
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf    
+          # Deploy Ingress-Nginx
           kubectl apply -f kubernetes/ingress-nginx/
           kubectl get svc -n ingress-nginx
           
-    #       # Deploy MetalLB LoadBalancer
-    #       kubectl apply -f kubernetes/metallb/metallb.yaml
-    #       kubectl wait --for=condition=Available deployment/controller -n metallb-system --timeout=120s
-    #       kubectl apply -f kubernetes/metallb/ip-pool.yaml
-    #       kubectl get pods -n metallb-system
+          # Deploy Local Path Provisioner
+          kubectl apply -f kubernetes/rancher-local/
+          kubectl get storageclass
+  
+      - name: Deploy Rook Ceph Cluster
+        working-directory: ./
+        run: |
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf    
+          # Deploy Rook Ceph
+          kubectl apply -f kubernetes/rook-ceph/crds.yaml
+          kubectl apply -f kubernetes/rook-ceph/common.yaml
+          kubectl apply -f kubernetes/rook-ceph/csi-operator.yaml
+          kubectl apply -f kubernetes/rook-ceph/operator.yaml
+          kubectl wait --for=condition=Available deployment/rook-ceph-operator -n rook-ceph --timeout=120s
+          kubectl apply -f kubernetes/rook-ceph/cluster.yaml
+          kubectl get pods -n rook-ceph
+          kubectl apply -f kubernetes/rook-ceph/block-storage/storageclass.yaml
 
-          
-    #       # Deploy Ingress-Nginx
-    #       kubectl apply -f kubernetes/ingress-nginx/
-    #       kubectl get svc -n ingress-nginx
-          
-    #       # Deploy Local Path Provisioner
-    #       kubectl apply -f kubernetes/rancher-local/
-    #       kubectl get storageclass
-          
-    #       # Deploy Rook Ceph
-    #       kubectl apply -f kubernetes/rook-ceph/crds.yaml
-    #       kubectl apply -f kubernetes/rook-ceph/common.yaml
-    #       kubectl apply -f kubernetes/rook-ceph/csi-operator.yaml
-    #       kubectl apply -f kubernetes/rook-ceph/operator.yaml
-    #       kubectl wait --for=condition=Available deployment/rook-ceph-operator -n rook-ceph --timeout=120s
-    #       kubectl apply -f kubernetes/rook-ceph/cluster.yaml
-    #       kubectl get pods -n rook-ceph
-    #       kubectl apply -f kubernetes/rook-ceph/block-storage/storageclass.yaml
+          # Rook Toolbox Verification
+          kubectl apply -f kubernetes/rook-ceph/toolbox.yaml
+          kubectl wait --for=condition=Ready pod -l app=rook-ceph-tools -n rook-ceph --timeout=300s
+          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph status
+          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph osd status
+          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph df
+          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- rados df
+          kubectl delete -f kubernetes/rook-ceph/toolbox.yaml
 
-    #       # Rook Toolbox Verification
-    #       kubectl apply -f kubernetes/rook-ceph/toolbox.yaml
-    #       kubectl wait --for=condition=Ready pod -l app=rook-ceph-tools -n rook-ceph --timeout=300s
-    #       kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph status
-    #       kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph osd status
-    #       kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph df
-    #       kubectl -n rook-ceph exec deploy/rook-ceph-tools -- rados df
-    #       kubectl delete -f kubernetes/rook-ceph/toolbox.yaml
-          
-    #       # Deploy Cert-Manager
-    #       kubectl apply -f kubernetes/cert-manager/cert-manager.yaml
-    #       kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
-    #       kubectl get pods -n cert-manager
-    #       kubectl get svc -n cert-manager
-          
-    #       # Create Cloudflare Secret & Apply Cluster Issuers
-    #       kubectl create secret generic cloudflare-apitoken-secret \
-    #         --namespace cert-manager \
-    #         --from-literal=apitoken='${{ secrets.CLOUDFLARE_API_TOKEN }}' \
-    #         --dry-run=client -o yaml | kubectl apply -f -
+      - name: Deploy Cert-Manager
+        working-directory: ./
+        run: |
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf          
+          # Deploy Cert-Manager
+          kubectl apply -f kubernetes/cert-manager/cert-manager.yaml
+          kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
+          kubectl get pods -n cert-manager
+          kubectl get svc -n cert-manager
+    
+          # Create Cloudflare Secret & Apply Cluster Issuers
+          kubectl create secret generic cloudflare-apitoken-secret \
+            --namespace cert-manager \
+            --from-literal=apitoken='${{ secrets.CLOUDFLARE_API_TOKEN }}' \
+            --dry-run=client -o yaml | kubectl apply -f -
          
-    #       kubectl apply -f kubernetes/cert-manager/cluster-issuers.yaml
-    #       kubectl get clusterissuers
-    #
+          kubectl apply -f kubernetes/cert-manager/cluster-issuers.yaml
+          kubectl get clusterissuers
 
       - name: Setup Helm
         uses: azure/setup-helm@v4.2.0
@@ -133,18 +138,18 @@ jobs:
             -f kubernetes/monitoring/values.yaml
           kubectl get pods -n monitoring
           
-    #   - name: Deploy Logging Stack
-    #     working-directory: ./
-    #     run: |
-    #       helm repo add grafana https://grafana.github.io/helm-charts
-    #       helm repo update
-    #       export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-    #       helm upgrade --install loki-stack grafana/loki-stack \
-    #         --namespace logging \
-    #         --create-namespace \
-    #         -f kubernetes/logging/values.yaml
-    #       kubectl get pods -n logging
-    #       kubectl get svc -n logging
+      - name: Deploy Logging Stack
+        working-directory: ./
+        run: |
+          helm repo add grafana https://grafana.github.io/helm-charts
+          helm repo update
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+          helm upgrade --install loki-stack grafana/loki-stack \
+            --namespace logging \
+            --create-namespace \
+            -f kubernetes/logging/values.yaml
+          kubectl get pods -n logging
+          kubectl get svc -n logging
 
       - name: Deploy ArgoCD
         working-directory: ./
