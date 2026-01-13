@@ -128,22 +128,17 @@ Deploy essential services. The repository includes a helper workflow/scripts.
 
 ---
 
-## 🧩 Component Configuration
+## 🧩 Component Documentation
 
-### Networking (MetalLB & Ingress)
-*   **MetalLB**: Configured in Layer 2 mode. Updates `ip-pool.yaml` with your LAN's reserved IP range.
-*   **Ingress**: Nginx Controller is exposed via MetalLB. `force-ssl-redirect` is enabled.
+Detailed documentation for each platform component:
 
-### Storage (Rook Ceph)
-*   **Devices**: Automatically consumes unused disks on worker nodes.
-*   **StorageClasses**:
-    *   `rook-ceph-block`: (Default) RWO Block storage.
-    *   `ceph-bucket`: Object storage (S3 compatible).
-    *   `ceph-filesystem`: RWX Shared filesystem.
-
-### Automation (ArgoCD)
-*   ArgoCD is deployed with a custom `values.yaml` enabling Ingress on `argocd.<DOMAIN>`.
-*   Connects to this repository to manage "App of Apps".
+*   **[MetalLB](kubernetes/docs/metallb.md)**: Network Load Balancer configuration.
+*   **[Ingress Nginx](kubernetes/docs/ingress-nginx.md)**: Ingress Controller setup and troubleshooting.
+*   **[Rook Ceph](kubernetes/docs/rook-ceph.md)**: Block & Object storage management.
+*   **[Cert-Manager](kubernetes/docs/cert-manager.md)**: TLS certificate automation.
+*   **[Monitoring](kubernetes/docs/monitoring.md)**: Prometheus & Grafana stack.
+*   **[Logging](kubernetes/docs/logging.md)**: Loki & Promtail stack.
+*   **[ArgoCD](kubernetes/docs/argocd.md)**: GitOps deployment & management.
 
 ---
 
