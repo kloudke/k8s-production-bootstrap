@@ -65,7 +65,9 @@ jobs:
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           kubectl get nodes
-
+          kubectl apply -f kubernetes/ingress-nginx/
+          kubectl get svc -n ingress-nginx
+          
     #       # Deploy MetalLB LoadBalancer
     #       kubectl apply -f kubernetes/metallb/metallb.yaml
     #       kubectl wait --for=condition=Available deployment/controller -n metallb-system --timeout=120s
@@ -114,6 +116,7 @@ jobs:
          
     #       kubectl apply -f kubernetes/cert-manager/cluster-issuers.yaml
     #       kubectl get clusterissuers
+    #
 
       - name: Setup Helm
         uses: azure/setup-helm@v4.2.0
