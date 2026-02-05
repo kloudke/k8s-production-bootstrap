@@ -22,6 +22,6 @@ Values are customized in `kubernetes/monitoring/values.yaml`:
 - **Retention**: Metrics retention period (default 10d).
 
 ## Accessing Grafana
-Access via the configured Ingress hostname (e.g., `https://grafana.cloudspinx.dpdns.org`).
+Access via the configured Ingress hostname (e.g., `https://grafana.kloudke.dpdns.org`).
 - **Default User**: `admin`
 - **Password**: Defined in `values.yaml` (`adminPassword`) or auto-generated.

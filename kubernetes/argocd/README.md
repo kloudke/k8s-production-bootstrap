@@ -18,7 +18,7 @@ Configured in `kubernetes/argocd/values.yaml`:
 - **Global Domain**: `global.domain` set to match the ingress host.
 
 ## Accessing UI
-Access via `https://argocd.cloudspinx.dpdns.org`.
+Access via `https://argocd.kloudke.dpdns.org`.
 - **Username**: `admin`
 - **Password**: The initial password is the name of the ArgoCD server pod.
   ```bash
