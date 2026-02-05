@@ -6,7 +6,8 @@ on:
 jobs:
   terraform:
     name: "Destroy Infrastructure"
-    runs-on: self-hosted
+    runs-on:
+      group: kloudke
     defaults:
       run:
         working-directory: ./terraform/proxmox
