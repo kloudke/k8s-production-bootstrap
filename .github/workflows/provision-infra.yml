@@ -6,7 +6,8 @@ on:
 jobs:
   terraform:
     name: "Provision Infrastructure"
-    runs-on: self-hosted
+    runs-on:
+      group: kloudke
     defaults:
       run:
         working-directory: ./terraform/proxmox
