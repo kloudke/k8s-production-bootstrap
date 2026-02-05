@@ -33,9 +33,9 @@ module "proxmox_vm" {
   vm_name          = "k8snode"
   template_id      = 9003
   vm_count         = 3
-  cpu_cores        = 2
+  cpu_cores        = 3
   cpu_sockets      = 1
-  memory           = 4096
+  memory           = 12288
   boot_order       = "order=scsi0;ide2;net0"
   clone            = true
   storage_pool     = "local-lvm"
