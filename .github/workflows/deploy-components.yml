@@ -2,11 +2,17 @@ name: Deploy Components
 
 on:
   workflow_dispatch:
+    workflows: ["Deploy Kubernetes"]
+    types:
+      - completed
+    branches:
+      - main
 
 jobs:
   deploy-components:
     name: "Deploy Components"
-    runs-on: self-hosted
+    runs-on:
+      group: kloudke
     defaults:
       run:
         working-directory: ./terraform/proxmox
