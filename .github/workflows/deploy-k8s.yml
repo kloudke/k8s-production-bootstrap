@@ -13,7 +13,8 @@ jobs:
   deploy-k8s:
     name: "Deploy Kubernetes"
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: self-hosted
+    runs-on:
+      group: kloudke
     defaults:
       run:
         working-directory: ./terraform/proxmox
