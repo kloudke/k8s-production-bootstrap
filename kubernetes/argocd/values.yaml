@@ -1,5 +1,5 @@
 global:
-  domain: argocd.cloudspinx.dpdns.org
+  domain: argocd.kloudke.dpdns.org
 
 server:
   extraArgs:
@@ -12,11 +12,11 @@ server:
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     hosts:
-      - argocd.cloudspinx.dpdns.org
+      - argocd.kloudke.dpdns.org
     paths:
       - /
     pathType: Prefix 
     tls:
       - secretName: argocd-server-tls
         hosts:
-          - argocd.cloudspinx.dpdns.org
+          - argocd.kloudke.dpdns.org
