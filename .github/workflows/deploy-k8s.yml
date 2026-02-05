@@ -79,6 +79,7 @@ jobs:
           ansible-playbook -i inventory/hosts.yml --private-key ~/.ssh/id_rsa -b -v fetch-kubeconfig.yml 
       
       - name: Get Nodes
+        working-directory: ./
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           kubectl get nodes
