@@ -110,6 +110,13 @@ jobs:
           kubectl -n rook-ceph exec deploy/rook-ceph-tools -- rados df
           kubectl delete -f kubernetes/rook-ceph/toolbox.yaml
 
+      - name: Deploy Local Path Provisioner
+        working-directory: ./
+        run: |
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf          
+          kubectl apply -f kubernetes/rancher-local/
+          kubectl get storageclass
+
       - name: Deploy Cert-Manager
         working-directory: ./
         run: |
