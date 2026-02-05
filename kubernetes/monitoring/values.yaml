@@ -6,13 +6,13 @@ grafana:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
-      - grafana.cloudspinx.dpdns.org
+      - grafana.kloudke.dpdns.org
     paths:
       - /
     tls:
       - secretName: grafana-server-tls
         hosts:
-          - grafana.cloudspinx.dpdns.org
+          - grafana.kloudke.dpdns.org
   persistence:
     enabled: true
     storageClassName: rook-ceph-block
