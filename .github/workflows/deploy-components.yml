@@ -10,8 +10,8 @@ on:
       - main
 
 jobs:
-  deploy-components:
-    name: "Deploy Components"
+  build-inventory:
+    name: "Build Inventory"
     runs-on:
       group: kloudke
     defaults:
@@ -65,9 +65,18 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
           ansible-playbook -i inventory/hosts.yml --private-key ~/.ssh/id_rsa -b -v fetch-kubeconfig.yml
-          
-      - name: Deploy MetalLB
+
+  deploy-metallb:
+    name: "Deploy MetalLB"
+    runs-on:
+      group: kloudke
+    defaults:
+      run:
         working-directory: ./
+    
+    needs: build-inventory
+    steps: 
+      - name: Deploy MetalLB
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           # Deploy MetalLB LoadBalancer
@@ -75,24 +84,45 @@ jobs:
           kubectl wait --for=condition=Available deployment/controller -n metallb-system --timeout=120s
           kubectl apply -f kubernetes/metallb/ip-pool.yaml
           kubectl get pods -n metallb-system
-    
-      - name: Deploy Ingress Nginx
+
+  deploy-ingress-nginx:
+    name: "Deploy Ingress Nginx"
+    runs-on:
+      group: kloudke
+    defaults:
+      run:
         working-directory: ./
+    needs: deploy-metallb
+    steps: 
+      - name: Deploy Ingress Nginx
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf    
-          # Deploy Ingress-Nginx
           kubectl apply -f kubernetes/ingress-nginx/
           kubectl get svc -n ingress-nginx
-          
+
+  deploy-local-path-provisioner:
+    name: "Deploy Local Path Provisioner"
+    runs-on:
+      group: kloudke
+    defaults:
+      run:
+        working-directory: ./  
+    steps: 
       - name: Deploy Local Path Provisioner
-        working-directory: ./
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf          
           kubectl apply -f kubernetes/rancher-local/
           kubectl get storageclass
   
-      - name: Deploy Rook Ceph Cluster
+  deploy-rook-ceph:
+    name: "Deploy Rook Ceph"
+    runs-on:
+      group: kloudke
+    defaults:
+      run:
         working-directory: ./
+    steps: 
+      - name: Deploy Rook Ceph Cluster
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf    
           # Deploy Rook Ceph
@@ -104,8 +134,19 @@ jobs:
           kubectl apply -f kubernetes/rook-ceph/cluster.yaml
           kubectl get pods -n rook-ceph
           kubectl apply -f kubernetes/rook-ceph/block-storage/storageclass.yaml
-
-          # Rook Toolbox Verification
+  
+  verify-rook-ceph:
+    name: "Verify Rook Ceph"
+    runs-on:
+      group: kloudke
+    defaults:
+      run:
+        working-directory: ./
+    needs: deploy-rook-ceph
+    steps: 
+      - name: Verify Rook Ceph
+        run: |
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           kubectl apply -f kubernetes/rook-ceph/toolbox.yaml
           kubectl wait --for=condition=Ready pod -l app=rook-ceph-tools -n rook-ceph --timeout=300s
           kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph status
@@ -113,18 +154,35 @@ jobs:
           kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph df
           kubectl -n rook-ceph exec deploy/rook-ceph-tools -- rados df
           kubectl delete -f kubernetes/rook-ceph/toolbox.yaml
-
-      - name: Deploy Cert-Manager
+  
+  deploy-cert-manager:
+    name: "Deploy Cert-Manager"
+    runs-on:
+      group: kloudke
+    defaults:
+      run:
         working-directory: ./
+    steps: 
+      - name: Deploy Cert-Manager
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf          
-          # Deploy Cert-Manager
           kubectl apply -f kubernetes/cert-manager/cert-manager.yaml
           kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
           kubectl get pods -n cert-manager
           kubectl get svc -n cert-manager
     
-          # Create Cloudflare Secret & Apply Cluster Issuers
+  deploy-cluster-issuers:
+    name: "Deploy Cluster Issuers"
+    runs-on:
+      group: kloudke
+    defaults:
+      run:
+        working-directory: ./
+    needs: deploy-cert-manager
+    steps: 
+      - name: Deploy Cluster Issuers
+        run: |
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf          
           kubectl create secret generic cloudflare-apitoken-secret \
             --namespace cert-manager \
             --from-literal=apitoken='${{ secrets.CLOUDFLARE_API_TOKEN }}' \
@@ -133,27 +191,43 @@ jobs:
           kubectl apply -f kubernetes/cert-manager/cluster-issuers.yaml
           kubectl get clusterissuers
 
+  deploy-monitoring:
+    name: "Deploy Monitoring Stack"
+    runs-on:
+      group: kloudke
+    defaults:
+      run:
+        working-directory: ./
+    needs: deploy-cluster-issuers
+    steps: 
       - name: Setup Helm
         uses: azure/setup-helm@v4.2.0
 
       - name: Deploy Monitoring Stack
-        working-directory: ./
         run: |
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo update
-          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
             --namespace monitoring \
             --create-namespace \
             -f kubernetes/monitoring/values.yaml
           kubectl get pods -n monitoring
           
-      - name: Deploy Logging Stack
+  deploy-logging:
+    name: "Deploy Logging Stack"
+    runs-on:
+      group: kloudke
+    defaults:
+      run:
         working-directory: ./
+    needs: deploy-monitoring
+    steps: 
+      - name: Deploy Logging Stack
         run: |
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           helm repo add grafana https://grafana.github.io/helm-charts
           helm repo update
-          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           helm upgrade --install loki-stack grafana/loki-stack \
             --namespace logging \
             --create-namespace \
@@ -161,9 +235,21 @@ jobs:
           kubectl get pods -n logging
           kubectl get svc -n logging
 
-      - name: Deploy ArgoCD
+  deploy-argocd:
+    name: "Deploy ArgoCD"
+    runs-on:
+      group: kloudke
+    defaults:
+      run:
         working-directory: ./
+    needs: deploy-logging
+    steps: 
+      - name: Setup Helm
+        uses: azure/setup-helm@v4.2.0
+
+      - name: Deploy ArgoCD
         run: |
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
           helm repo add argo https://argoproj.github.io/argo-helm
           helm repo update
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
