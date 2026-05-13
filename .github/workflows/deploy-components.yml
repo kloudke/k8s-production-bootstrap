@@ -79,7 +79,6 @@ jobs:
       - name: Deploy MetalLB
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-          # Deploy MetalLB LoadBalancer
           kubectl apply -f kubernetes/metallb/metallb.yaml
           kubectl wait --for=condition=Available deployment/controller -n metallb-system --timeout=120s
           kubectl apply -f kubernetes/metallb/ip-pool.yaml
@@ -125,7 +124,6 @@ jobs:
       - name: Deploy Rook Ceph Cluster
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf    
-          # Deploy Rook Ceph
           kubectl apply -f kubernetes/rook-ceph/crds.yaml
           kubectl apply -f kubernetes/rook-ceph/common.yaml
           kubectl apply -f kubernetes/rook-ceph/csi-operator.yaml
