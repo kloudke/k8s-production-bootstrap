@@ -84,8 +84,23 @@ jobs:
           kubectl apply -f kubernetes/metallb/ip-pool.yaml
           kubectl get pods -n metallb-system
 
-  deploy-ingress-nginx:
-    name: "Deploy Ingress Nginx"
+  # deploy-ingress-nginx:
+  #   name: "Deploy Ingress Nginx"
+  #   runs-on:
+  #     group: kloudke
+  #   defaults:
+  #     run:
+  #       working-directory: ./
+  #   needs: deploy-metallb
+  #   steps: 
+  #     - name: Deploy Ingress Nginx
+  #       run: |
+  #         export KUBECONFIG=ansible/inventory/artifacts/admin.conf    
+  #         kubectl apply -f kubernetes/ingress-nginx/
+  #         kubectl get svc -n ingress-nginx
+
+  deploy-traefik:
+    name: "Deploy Traefik"
     runs-on:
       group: kloudke
     defaults:
@@ -93,11 +108,19 @@ jobs:
         working-directory: ./
     needs: deploy-metallb
     steps: 
-      - name: Deploy Ingress Nginx
+      - name: Setup Helm
+        uses: azure/setup-helm@v4.2.0
+
+      - name: Deploy Traefik
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf    
-          kubectl apply -f kubernetes/ingress-nginx/
-          kubectl get svc -n ingress-nginx
+          helm repo add traefik https://traefik.github.io/charts
+          helm repo update
+          helm install traefik traefik/traefik \
+            -f kubernetes/traefik/values.yaml \
+            --wait
+          kubectl get pods -n traefik
+          kubectl describe GatewayClass traefik
 
   deploy-local-path-provisioner:
     name: "Deploy Local Path Provisioner"
