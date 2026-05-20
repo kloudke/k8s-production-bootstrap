@@ -9,12 +9,6 @@ variable "proxmox_user" {
   default     = "terraform@pve"
 }
 
-variable "proxmox_password" {
-  description = "Proxmox Password"
-  type        = string
-  sensitive   = true
-}
-
 variable "master_count" {
   description = "Number of Control Plane Nodes"
   type        = number
@@ -25,4 +19,15 @@ variable "ssh_keys" {
   description = "List of SSH public keys to add to the VM"
   type        = list(string)
   default     = []
+}
+
+variable "proxmox_api_token_id" {
+  description = "Proxmox API Token ID"
+  type        = string
+}
+
+variable "proxmox_api_token_secret" {
+  description = "Proxmox API Token Secret"
+  type        = string
+  sensitive   = true
 }
