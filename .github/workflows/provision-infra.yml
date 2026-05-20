@@ -8,7 +8,7 @@ jobs:
   terraform:
     name: "Provision Infrastructure"
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./terraform/proxmox

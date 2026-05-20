@@ -61,16 +61,15 @@ module "proxmox_vm" {
   networks = [
     {
       id     = "0"
-      bridge = "vmbr0"
+      bridge = "vmbr1"
       model  = "virtio"
     }
   ]
   cloudinit = {
     user_fullname = "Gedion Kiprotich"
     timezone      = "Africa/Nairobi"
-    ip_address    = "192.168.1.130/24"
-    enable_dhcp   = false
-    nic           = "enp6s18"
+    ip_address    = "172.16.100.200/24"
+    gateway       = "172.16.100.1"
   }
 }
 

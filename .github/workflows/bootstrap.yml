@@ -14,7 +14,7 @@ jobs:
     name: "Bootstrap Nodes"
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./terraform/proxmox

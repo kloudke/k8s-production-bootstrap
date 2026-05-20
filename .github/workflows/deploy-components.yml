@@ -13,7 +13,7 @@ jobs:
   build-inventory:
     name: "Build Inventory"
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./terraform/proxmox
