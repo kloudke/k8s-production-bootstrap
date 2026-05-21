@@ -69,7 +69,7 @@ jobs:
   deploy-metallb:
     name: "Deploy MetalLB"
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./
@@ -102,7 +102,7 @@ jobs:
   deploy-traefik:
     name: "Deploy Traefik"
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./
@@ -125,7 +125,7 @@ jobs:
   deploy-local-path-provisioner:
     name: "Deploy Local Path Provisioner"
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./  
@@ -139,7 +139,7 @@ jobs:
   deploy-rook-ceph:
     name: "Deploy Rook Ceph"
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./
@@ -159,7 +159,7 @@ jobs:
   verify-rook-ceph:
     name: "Verify Rook Ceph"
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./
@@ -179,7 +179,7 @@ jobs:
   deploy-cert-manager:
     name: "Deploy Cert-Manager"
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./
@@ -195,7 +195,7 @@ jobs:
   deploy-cluster-issuers:
     name: "Deploy Cluster Issuers"
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./
@@ -215,7 +215,7 @@ jobs:
   deploy-monitoring:
     name: "Deploy Monitoring Stack"
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./
@@ -238,12 +238,15 @@ jobs:
   deploy-logging:
     name: "Deploy Logging Stack"
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./
     needs: deploy-monitoring
-    steps: 
+    steps:
+      - name: Setup Helm
+        uses: azure/setup-helm@v4.2.0
+
       - name: Deploy Logging Stack
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf
@@ -259,7 +262,7 @@ jobs:
   deploy-argocd:
     name: "Deploy ArgoCD"
     runs-on:
-      group: kloudke
+      group: k8s
     defaults:
       run:
         working-directory: ./
