@@ -36,7 +36,7 @@ module "proxmox_vm" {
   vm_count         = 5
   cpu_cores        = 3
   cpu_sockets      = 1
-  memory           = 10240
+  memory           = 8192
   boot_order       = "order=scsi0;ide2;net0"
   clone            = true
   storage_pool     = "local-lvm"
@@ -60,16 +60,17 @@ module "proxmox_vm" {
   ]
   networks = [
     {
-      id     = "0"
-      bridge = "vmbr1"
+      id     = "10"
+      bridge = "vmbr0"
       model  = "virtio"
+      tag    = "30"
     }
   ]
   cloudinit = {
     user_fullname = "Gedion Kiprotich"
     timezone      = "Africa/Nairobi"
-    ip_address    = "172.16.100.200/24"
-    gateway       = "172.16.100.1"
+    ip_address    = "172.20.30.10/24"
+    gateway       = "172.20.30.1"
   }
 }
 
