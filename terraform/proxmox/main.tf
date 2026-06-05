@@ -11,6 +11,7 @@ terraform {
 
   cloud {
     organization = "devops_projects_gidii"
+    hostname     = "app.terraform.io"
     workspaces {
       name = "k8s-production-bootstrap"
     }
