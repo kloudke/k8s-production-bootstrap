@@ -65,7 +65,7 @@ local_volume_provisioner_enabled: false
 # snapshot_controller_namespace: kube-system
 
 # Gateway API CRDs
-gateway_api_enabled: false
+gateway_api_enabled: true
 
 # Nginx ingress controller deployment
 ingress_nginx_enabled: false
@@ -223,12 +223,12 @@ argocd_enabled: false
 
 # Kube VIP
 kube_vip_enabled: false
-# kube_vip_arp_enabled: true
-# kube_vip_controlplane_enabled: true
-# kube_vip_address: 192.168.56.120
-# loadbalancer_apiserver:
-#   address: "{{ kube_vip_address }}"
-#   port: 6443
+kube_vip_arp_enabled: true
+kube_vip_controlplane_enabled: true
+kube_vip_address: 172.20.30.10
+loadbalancer_apiserver:
+  address: "{{ kube_vip_address }}"
+  port: 6443
 # kube_vip_interface: eth0
 # kube_vip_services_enabled: false
 # kube_vip_dns_mode: first
