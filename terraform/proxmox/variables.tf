@@ -9,7 +9,7 @@ variable "proxmox_user" {
   default     = "terraform@pve"
 }
 
-variable "master_count" {
+variable "master_nodes" {
   description = "Number of Control Plane Nodes"
   type        = number
   default     = 1

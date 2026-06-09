@@ -37,7 +37,7 @@ module "proxmox_vm" {
   vm_count         = 5
   cpu_cores        = 3
   cpu_sockets      = 1
-  memory           = 8192
+  memory           = 10240
   boot_order       = "order=scsi0;ide2;net0"
   clone            = true
   storage_pool     = "local-lvm"
@@ -79,8 +79,8 @@ resource "local_file" "ansible_inventory" {
   content = templatefile("${path.module}/inventory.tpl", {
     vm_names = sort(keys(module.proxmox_vm.vm_ip_addresses))
     vm_ips   = module.proxmox_vm.vm_ip_addresses
-    masters  = slice(sort(keys(module.proxmox_vm.vm_ip_addresses)), 0, var.master_count)
-    workers  = slice(sort(keys(module.proxmox_vm.vm_ip_addresses)), var.master_count, length(keys(module.proxmox_vm.vm_ip_addresses)))
+    masters  = slice(sort(keys(module.proxmox_vm.vm_ip_addresses)), 0, var.master_nodes)
+    workers  = slice(sort(keys(module.proxmox_vm.vm_ip_addresses)), var.master_nodes, length(keys(module.proxmox_vm.vm_ip_addresses)))
   })
   filename = "${path.module}/../../ansible/inventory/hosts.yml"
 }
