@@ -34,10 +34,10 @@ module "proxmox_vm" {
   node             = "proxmox-pve01"
   vm_name          = "k8snode"
   template_id      = 9003
-  vm_count         = 5
+  vm_count         = 4
   cpu_cores        = 3
   cpu_sockets      = 1
-  memory           = 10240
+  memory           = 12288
   boot_order       = "order=scsi0;ide2;net0"
   clone            = true
   storage_pool     = "local-lvm"
