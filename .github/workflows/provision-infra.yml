@@ -9,6 +9,7 @@ jobs:
     name: "Provision Infrastructure"
     runs-on:
       group: k8s
+      labels: self-hosted
     defaults:
       run:
         working-directory: ./terraform/proxmox
