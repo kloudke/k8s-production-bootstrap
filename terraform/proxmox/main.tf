@@ -38,7 +38,7 @@ module "proxmox_vm" {
   cpu_cores        = 3
   cpu_sockets      = 1
   memory           = 12288
-  boot_order       = "order=scsi0;ide2;net0"
+  boot_order       = "order=scsi0;ide2"
   clone            = true
   storage_pool     = "local-lvm"
   iso_storage_pool = "local"
