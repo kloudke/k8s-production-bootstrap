@@ -70,7 +70,7 @@ module "proxmox_vm" {
   cloudinit = {
     user_fullname = "Gedion Kiprotich"
     timezone      = "Africa/Nairobi"
-    ip_address    = "172.20.30.11/24"
+    ip_address    = "172.20.30.10/24"
     gateway       = "172.20.30.1"
   }
 }
