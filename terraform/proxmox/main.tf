@@ -52,7 +52,7 @@ module "proxmox_vm" {
       format  = "qcow2"
     },
     {
-      size    = "50G"
+      size    = "70G"
       storage = "local-lvm"
       type    = "disk"
       slot    = "scsi1"
