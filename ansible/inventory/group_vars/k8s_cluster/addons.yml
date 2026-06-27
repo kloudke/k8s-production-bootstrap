@@ -65,10 +65,7 @@ local_volume_provisioner_enabled: false
 # snapshot_controller_namespace: kube-system
 
 # Gateway API CRDs
-gateway_api_enabled: true
-gateway_api_standard_crds_checksums:
-  no_arch:
-    1.4.1: sha256:73b91b77f6be023a8c92c969fc664e5bd3b1a28aea59eac9ebc904607354dad2
+gateway_api_enabled: false
 
 # Nginx ingress controller deployment
 ingress_nginx_enabled: false

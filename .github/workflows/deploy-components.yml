@@ -113,6 +113,11 @@ jobs:
       - name: Setup Helm
         uses: azure/setup-helm@v4.2.0
 
+      - name: Install Gateway API v1.5.1 CRDs
+        run: |
+          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+          kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
+
       - name: Deploy Traefik
         run: |
           export KUBECONFIG=ansible/inventory/artifacts/admin.conf    
