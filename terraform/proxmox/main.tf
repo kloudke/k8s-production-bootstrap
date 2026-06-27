@@ -34,10 +34,10 @@ module "proxmox_vm" {
   node             = "proxmox-pve01"
   vm_name          = "k8snode"
   template_id      = 9003
-  vm_count         = 4
+  vm_count         = 5
   cpu_cores        = 3
   cpu_sockets      = 1
-  memory           = 12288
+  memory           = 10240
   boot_order       = "order=scsi0;ide2"
   clone            = true
   storage_pool     = "local-lvm"
@@ -52,7 +52,7 @@ module "proxmox_vm" {
       format  = "qcow2"
     },
     {
-      size    = "70G"
+      size    = "50G"
       storage = "local-lvm"
       type    = "disk"
       slot    = "scsi1"
