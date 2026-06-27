@@ -243,6 +243,7 @@ jobs:
             --create-namespace \
             -f kubernetes/monitoring/values.yaml
           kubectl get pods -n monitoring
+          kubectl apply -f kubernetes/monitoring/ingressroute.yaml
           
   deploy-logging:
     name: "Deploy Logging Stack"
@@ -291,3 +292,4 @@ jobs:
             -f kubernetes/argocd/values.yaml
           kubectl get pods -n argocd
           kubectl get svc -n argocd
+          kubectl apply -f kubernetes/argocd/ingressroute.yaml

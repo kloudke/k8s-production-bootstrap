@@ -5,7 +5,7 @@ server:
   extraArgs:
     - --insecure
   ingress:
-    enabled: true
+    enabled: false
     ingressClassName: nginx
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
