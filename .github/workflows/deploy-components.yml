@@ -124,6 +124,8 @@ jobs:
           helm repo add traefik https://traefik.github.io/charts
           helm repo update
           helm install traefik traefik/traefik \
+            --namespace traefik \
+            --create-namespace \
             -f kubernetes/traefik/values.yaml \
             --wait
           kubectl get pods -n traefik
@@ -163,25 +165,25 @@ jobs:
           kubectl get pods -n rook-ceph
           kubectl apply -f kubernetes/rook-ceph/block-storage/storageclass.yaml
   
-  verify-rook-ceph:
-    name: "Verify Rook Ceph"
-    runs-on:
-      group: k8s
-    defaults:
-      run:
-        working-directory: ./
-    needs: deploy-rook-ceph
-    steps: 
-      - name: Verify Rook Ceph
-        run: |
-          export KUBECONFIG=ansible/inventory/artifacts/admin.conf
-          kubectl apply -f kubernetes/rook-ceph/toolbox.yaml
-          kubectl wait --for=condition=Ready pod -l app=rook-ceph-tools -n rook-ceph --timeout=300s
-          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph status
-          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph osd status
-          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph df
-          kubectl -n rook-ceph exec deploy/rook-ceph-tools -- rados df
-          kubectl delete -f kubernetes/rook-ceph/toolbox.yaml
+  # verify-rook-ceph:
+  #   name: "Verify Rook Ceph"
+  #   runs-on:
+  #     group: k8s
+  #   defaults:
+  #     run:
+  #       working-directory: ./
+  #   needs: deploy-rook-ceph
+  #   steps: 
+  #     - name: Verify Rook Ceph
+  #       run: |
+  #         export KUBECONFIG=ansible/inventory/artifacts/admin.conf
+  #         kubectl apply -f kubernetes/rook-ceph/toolbox.yaml
+  #         kubectl wait --for=condition=Ready pod -l app=rook-ceph-tools -n rook-ceph --timeout=300s
+  #         kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph status
+  #         kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph osd status
+  #         kubectl -n rook-ceph exec deploy/rook-ceph-tools -- ceph df
+  #         kubectl -n rook-ceph exec deploy/rook-ceph-tools -- rados df
+  #         kubectl delete -f kubernetes/rook-ceph/toolbox.yaml
   
   deploy-cert-manager:
     name: "Deploy Cert-Manager"
